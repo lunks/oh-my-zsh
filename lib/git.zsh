@@ -9,6 +9,8 @@ function git_prompt_info() {
 # Checks if working tree is dirty
 parse_git_dirty() {
   local SUBMODULE_SYNTAX=''
+  local GIT_STATUS=''
+  local CLEAN_MESSAGE='nothing to commit (working directory clean)'
   if [[ "$(git config --get oh-my-zsh.hide-status)" != "1" ]]; then
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
           SUBMODULE_SYNTAX="--ignore-submodules=dirty"
@@ -17,8 +19,8 @@ parse_git_dirty() {
       echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
     else
       echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
-    fi
-  fi
+    fi  
+  fi  
 }
 
 # get the difference between the local and remote branches
@@ -62,7 +64,7 @@ function git_prompt_long_sha() {
 git_prompt_status() {
   INDEX=$(git status --porcelain -b 2> /dev/null)
   STATUS=""
-  if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
+  if $(echo "$INDEX" | grep -E '^\?\? ' &> /dev/null); then
     STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
   fi
   if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
@@ -112,7 +114,7 @@ function git_compare_version() {
   local INPUT_GIT_VERSION=$1;
   local INSTALLED_GIT_VERSION
   INPUT_GIT_VERSION=(${(s/./)INPUT_GIT_VERSION});
-  INSTALLED_GIT_VERSION=($(git --version));
+  INSTALLED_GIT_VERSION=($(git --version 2>/dev/null));
   INSTALLED_GIT_VERSION=(${(s/./)INSTALLED_GIT_VERSION[3]});
 
   for i in {1..3}; do
