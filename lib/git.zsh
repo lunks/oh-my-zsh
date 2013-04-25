@@ -19,8 +19,10 @@ parse_git_dirty() {
       echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
     else
       echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
-    fi  
-  fi  
+    fi
+  else
+    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  fi
 }
 
 # get the difference between the local and remote branches
